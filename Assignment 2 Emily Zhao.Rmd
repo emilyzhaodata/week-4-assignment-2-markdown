@@ -1,0 +1,119 @@
+---
+title: "Assignment 2"
+author: "Emily Zhao"
+date: "6/19/2022"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+Section 1
+``` {r, include = TRUE}
+
+#Description of the data
+
+#The dataset I am using is to measure whether voters want democrats or republicans in congress in 2022. The data measures the number of people voted for democrats or republicans from various channels/surveys. I want to answer research questions on how the political interest for different parties differentiate from multi channels. It has both continuous and categorical data, and in csv format with comma delimited.The normal tools to open are excel and R.
+
+
+```
+
+```{r setup package, include = TRUE}
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(dplyr)
+library(readr)
+
+```
+
+Section 2
+```{r read data, include = TRUE}
+#I used the read csv function from readr package
+data<-read.csv("C:\\Users\\emily.zhao\\Documents\\generic_ballot_polls.csv")
+
+```
+
+Section 3
+```{r , include = TRUE}
+
+#I leave the columns I want to keep as only channels, sponsors, date and numbers of voters
+data_selected<-data%>%select(pollster,sponsors,fte_grade,start_date,end_date,created_at,dem,rep,sample_size,methodology)
+
+#rename some columns 
+data_selected <- data_selected %>% rename(sponsor = sponsors, grade = fte_grade)
+
+```
+
+Section 4
+
+
+```{r , include = TRUE}
+
+#This dataframe has 367 rows and 10 columns. The names of the columns and a brief description of each are in the table below:
+
+```
+
+
+```{r, include = TRUE}
+#install.packages("knitr")
+library(knitr)
+kable(data_selected)
+data<-read.csv("C:\\Users\\emily.zhao\\Documents\\generic_ballot_polls.csv")
+description<-read.csv("C:\\Users\\emily.zhao\\Documents\\Description.csv")
+description <- description %>% rename(Columns = ï..Columns)
+kable(description)
+```
+
+Section 5 
+
+```{r, include = TRUE}
+
+data_selected<-data_selected%>%select(pollster,dem,rep)
+
+summary(data_selected$dem)
+summary(data_selected$rep)
+
+```
+
+Group by pollster to see rankings and data summary
+
+```{r, include = TRUE}
+
+data_group<-data_selected%>%group_by(pollster) %>%
+  summarise(democrat=sum(dem),republican=sum(rep))
+
+summary(data_group$democrat)
+sum(is.na(data_group$democrat))
+
+summary(data_group$republican)
+sum(is.na(data_group$republican))
+
+democrat_summary<- c(34,3545,320.64,0)
+republican_summary<- c(29,3145,314.90,0)
+
+democrat_summary
+republican_summary
+
+data_group$democrat<-round(data_group$democrat, digits = 0)
+data_group$republican<-round(data_group$republican, digits = 0)
+
+kable(data_group)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
